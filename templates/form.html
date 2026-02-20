@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Nueva orden' if mode == 'create' else 'Editar orden' }}{% endblock %}
+
+{% block content %}
+<h2>{{ 'Crear nueva orden de servicio' if mode == 'create' else 'Editar orden de servicio' }}</h2>
+
+<form method="post" class="order-form">
+  <label>
+    Referencia
+    <input type="text" name="reference" required value="{{ order.reference if order else '' }}" />
+  </label>
+
+  <label>
+    Empresa
+    <input type="text" name="company" required value="{{ order.company if order else '' }}" />
+  </label>
+
+  <label>
+    Descripción
+    <textarea name="description" required rows="4">{{ order.description if order else '' }}</textarea>
+  </label>
+
+  <label>
+    Estado
+    <select name="status" required>
+      {% set current_status = order.status if order else 'Pendiente' %}
+      {% for status in status_options %}
+        <option value="{{ status }}" {% if current_status == status %}selected{% endif %}>{{ status }}</option>
+      {% endfor %}
+    </select>
+  </label>
+
+  <div class="form-actions">
+    <button class="btn" type="submit">{{ 'Crear orden' if mode == 'create' else 'Guardar cambios' }}</button>
+    <a href="{{ url_for('index') }}">Cancelar</a>
+  </div>
+</form>
+{% endblock %}
